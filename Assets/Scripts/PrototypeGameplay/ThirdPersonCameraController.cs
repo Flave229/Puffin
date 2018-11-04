@@ -1,76 +1,78 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-[RequireComponent(typeof(KeyboardControlCapture))]
+[RequireComponent( typeof( KeyboardControlCapture ) )]
 public class ThirdPersonCameraController : MonoBehaviour
 {
-	[SerializeField]
-	private Transform _cameraPivot;
-	[SerializeField]
-	private Transform _cameraPitch;
-	[SerializeField]
-	private Camera _camera;
-	private KeyboardControlCapture _keyboardController;
+    [SerializeField]
+    private Transform _CameraPivot;
+    [SerializeField]
+    private Transform _CameraPitch;
+    [SerializeField]
+    private Camera _Camera;
+    private KeyboardControlCapture _KeyboardController;
 
-	private float _overheadClampAngle = 90.0f;
-	private float _underCharacterClampAngle = 270.0f;
+    private float _OverheadClampAngle = 90.0f;
+    private float _UnderCharacterClampAngle = 270.0f;
 
-	public float MouseSensitivity;
-
-
-	public void Start()
-	{
-		_keyboardController = GetComponent<KeyboardControlCapture>();
-	}
+    public float _MouseSensitivity;
 
 
-	public void Update()
-	{
-		if (!_keyboardController.IsControllerCaptured())
-		{
-			return;
-		}
-
-		Vector3 cameraPitch = _cameraPitch.transform.localEulerAngles;
-		Vector3 cameraPivot = _cameraPivot.transform.localEulerAngles;
-
-		cameraPitch.x += Input.GetAxis("Mouse Y") * MouseSensitivity * -1.0f * Time.deltaTime;
-		cameraPivot.y += Input.GetAxis("Mouse X") * MouseSensitivity * Time.deltaTime;
-
-		if (cameraPitch.x > _overheadClampAngle && cameraPitch.x < _underCharacterClampAngle)
-		{
-			if (cameraPitch.x < 180.0f)
-			{
-				cameraPitch.x = _overheadClampAngle;
-			}
-			else
-			{
-				cameraPitch.x = _underCharacterClampAngle;
-			}
-		}
-
-		_cameraPitch.transform.localEulerAngles = cameraPitch;
-		_cameraPivot.transform.localEulerAngles = cameraPivot;
-	}
-
-	public Transform GetCameraPivotTransform()
-	{
-		return _cameraPivot;
-	}
-
-	public Transform GetCameraPitchTransform()
-	{
-		return _cameraPitch;
-	}
-
-	public Vector3 GetCameraFlatForward()
-	{
-		return _cameraPivot.forward;
-	}
+    public void Start()
+    {
+        _KeyboardController = GetComponent<KeyboardControlCapture>( );
+    }
 
 
-	public void EnableCamera(bool isEnabled)
-	{
-		_camera.enabled = isEnabled;
-		_camera.GetComponent<AudioListener>().enabled = isEnabled;
-	}
+    public void Update()
+    {
+        if ( !_KeyboardController.IsControllerCaptured( ) )
+        {
+            return;
+        }
+
+        Vector3 cameraPitch = _CameraPitch.transform.localEulerAngles;
+        Vector3 cameraPivot = _CameraPivot.transform.localEulerAngles;
+
+        cameraPitch.x += Input.GetAxis( "Mouse Y" ) * _MouseSensitivity * -1.0f * Time.deltaTime;
+        cameraPivot.y += Input.GetAxis( "Mouse X" ) * _MouseSensitivity * Time.deltaTime;
+        
+        if ( cameraPitch.x > _OverheadClampAngle && cameraPitch.x < _UnderCharacterClampAngle )
+        {
+            if ( cameraPitch.x < 180.0f )
+            {
+                cameraPitch.x = _OverheadClampAngle;
+            }
+            else
+            {
+                cameraPitch.x = _UnderCharacterClampAngle;
+            }
+        }
+
+        _CameraPitch.transform.localEulerAngles = cameraPitch;
+        _CameraPivot.transform.localEulerAngles = cameraPivot;
+    }
+
+    public Transform GetCameraPivotTransform()
+    {
+        return _CameraPivot;
+    }
+
+    public Transform GetCameraPitchTransform()
+    {
+        return _CameraPitch;
+    }
+
+    public Vector3 GetCameraFlatForward()
+    {
+        return _CameraPivot.forward;
+    }
+
+
+    public void EnableCamera( bool isEnabled )
+    {
+        _Camera.enabled = isEnabled;
+        _Camera.GetComponent<AudioListener>( ).enabled = isEnabled;
+    }
 }

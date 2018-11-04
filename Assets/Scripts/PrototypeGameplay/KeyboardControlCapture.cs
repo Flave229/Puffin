@@ -1,25 +1,28 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class KeyboardControlCapture : MonoBehaviour
 {
-	private bool _isControllerCaptured = false;
 
-	void Update()
-	{
-		if (Input.GetMouseButton(0))
-		{
-			_isControllerCaptured = true;
-			Cursor.lockState = CursorLockMode.Locked;
-		}
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			_isControllerCaptured = false;
-			Cursor.lockState = CursorLockMode.None;
-		}
-	}
+    private bool _isControllerCaptured = false;
+    
+    void Update()
+    {
+        if ( Input.GetMouseButton( 0 ) )
+        {
+            _isControllerCaptured = true;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        if ( Input.GetKey( KeyCode.Escape ) )
+        {
+            _isControllerCaptured = false;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
 
-	public bool IsControllerCaptured()
-	{
-		return _isControllerCaptured;
-	}
+    public bool IsControllerCaptured()
+    {
+        return _isControllerCaptured;
+    }
 }
