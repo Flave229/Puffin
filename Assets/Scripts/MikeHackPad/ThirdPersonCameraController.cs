@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.MikeHackPad
 {
-	[RequireComponent(typeof(KeyboardControlCapture))]
+	[RequireComponent( typeof( KeyboardControlCapture ) )]
 	public class ThirdPersonCameraController : MonoBehaviour
 	{
 		[SerializeField]
@@ -27,7 +27,7 @@ namespace Assets.Scripts.MikeHackPad
 
 		public void Update()
 		{
-			if (!_keyboardController.IsControllerCaptured())
+			if ( !_keyboardController.IsControllerCaptured() )
 			{
 				return;
 			}
@@ -35,12 +35,12 @@ namespace Assets.Scripts.MikeHackPad
 			Vector3 cameraPitch = _cameraPitch.transform.localEulerAngles;
 			Vector3 cameraPivot = _cameraPivot.transform.localEulerAngles;
 
-			cameraPitch.x += Input.GetAxis("Mouse Y") * MouseSensitivity * -1.0f * Time.deltaTime;
-			cameraPivot.y += Input.GetAxis("Mouse X") * MouseSensitivity * Time.deltaTime;
+			cameraPitch.x += Input.GetAxis( "Mouse Y" ) * MouseSensitivity * -1.0f * Time.deltaTime;
+			cameraPivot.y += Input.GetAxis( "Mouse X" ) * MouseSensitivity * Time.deltaTime;
 
-			if (cameraPitch.x > _overheadClampAngle && cameraPitch.x < _underCharacterClampAngle)
+			if ( cameraPitch.x > _overheadClampAngle && cameraPitch.x < _underCharacterClampAngle )
 			{
-				if (cameraPitch.x < 180.0f)
+				if ( cameraPitch.x < 180.0f )
 				{
 					cameraPitch.x = _overheadClampAngle;
 				}
@@ -69,10 +69,15 @@ namespace Assets.Scripts.MikeHackPad
 			return _cameraPivot.forward;
 		}
 
-		public void EnableCamera(bool isEnabled)
+		public void EnableCamera( bool isEnabled )
 		{
 			_camera.enabled = isEnabled;
 			_camera.GetComponent<AudioListener>().enabled = isEnabled;
+		}
+
+		public Transform GetCameraTransform()
+		{
+			return _camera.transform;
 		}
 	}
 }
