@@ -14,7 +14,7 @@ namespace Assets.Scripts.DavidHackPad.AI.Desires
 		void Awake()
 		{
 			System.Random randomGenerator = new System.Random();
-			int randomJiggle = randomGenerator.Next(_caloryJiggle) - (_caloryJiggle * 2);
+			int randomJiggle = randomGenerator.Next(-_caloryJiggle, _caloryJiggle);
 
 			_calories += randomJiggle;
 		}
