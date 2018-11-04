@@ -1,5 +1,4 @@
-﻿using System;
-using Assets.Scripts.DavidHackPad.Energy;
+﻿using Assets.Scripts.DavidHackPad.Energy;
 using UnityEngine;
 
 namespace Assets.Scripts.DavidHackPad.AI.Desires

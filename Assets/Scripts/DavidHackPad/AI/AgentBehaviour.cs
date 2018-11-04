@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.DavidHackPad.AI.Desires;
+﻿using Assets.Scripts.DavidHackPad.AI.ColliderHelpers;
+using Assets.Scripts.DavidHackPad.AI.Desires;
 using Assets.Scripts.DavidHackPad.AI.Movement;
 using Assets.Scripts.DavidHackPad.Energy;
 using UnityEngine;
@@ -7,7 +8,7 @@ using Random = System.Random;
 namespace Assets.Scripts.DavidHackPad.AI
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class AgentBehaviour : MonoBehaviour, IEnergyReciever
+	public class AgentBehaviour : MonoBehaviour, IEnergyReciever, IAiCollider
 	{
 		private Rigidbody _rigidbody;
 		private float _kiloJouleEnergy;
@@ -49,7 +50,7 @@ namespace Assets.Scripts.DavidHackPad.AI
 				return;
 			}
 
-			Seek seekForce = new Seek();
+			ISteeringBehaviour seekForce = new Seek();
 			Vector3 forceTowardsFood = seekForce.ApplyForce(transform.position, _targetFood.transform.position);
 			forceTowardsFood = new Vector3(forceTowardsFood.x, 0, forceTowardsFood.z) * 3;
 
@@ -97,6 +98,11 @@ namespace Assets.Scripts.DavidHackPad.AI
 			Random randomGenerator = new Random();
 			_rigidbody.AddForce(randomGenerator.Next(5, 10), 0, randomGenerator.Next(5, 10));
 			_alive = false;
+
+			foreach (Transform child in transform)
+			{
+				Destroy(child.gameObject);
+			}
 		}
 
 		public void ConsumeEnergy(EnergyCompontent energy)
@@ -106,6 +112,37 @@ namespace Assets.Scripts.DavidHackPad.AI
 				_kiloJouleEnergy += energy.KiloJoules;
 				FindFood();
 			}
+		}
+
+		public void AiOnTriggerEnter(Collider collidingEntity)
+		{
+			AgentBehaviour agentBehaviour = collidingEntity.GetComponent<AgentBehaviour>();
+			if (agentBehaviour == null || agentBehaviour.IsAlive() == false)
+			{
+				return;
+			}
+
+			ISteeringBehaviour repelBehaviour = new Repel();
+			Vector3 force = repelBehaviour.ApplyForce(transform.position, collidingEntity.transform.position);
+			_rigidbody.AddForce(new Vector3(force.x, 0, force.z) / 3, ForceMode.Force);
+		}
+
+		public void AiOnTriggerStay(Collider collidingEntity)
+		{
+			AgentBehaviour agentBehaviour = collidingEntity.GetComponent<AgentBehaviour>();
+			if (agentBehaviour == null || agentBehaviour.IsAlive() == false)
+			{
+				return;
+			}
+
+			ISteeringBehaviour repelBehaviour = new Repel();
+			Vector3 force = repelBehaviour.ApplyForce(transform.position, collidingEntity.transform.position);
+			_rigidbody.AddForce(new Vector3(force.x, 0, force.z) / 3, ForceMode.Force);
+		}
+
+		private bool IsAlive()
+		{
+			return _alive;
 		}
 	}
 }
