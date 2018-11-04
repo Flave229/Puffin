@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22d419cc9c45a094b8fadc86cc8842ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _calories: 20
+  _calories: 15
   _caloryJiggle: 10
 --- !u!135 &135353580768338020
 SphereCollider:
