@@ -145,10 +145,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a4e673244242544985f37de923238b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CameraPivot: {fileID: 1894735752}
-  _CameraPitch: {fileID: 1646807030}
-  _Camera: {fileID: 1982245949}
-  _MouseSensitivity: 250
+  _cameraPivot: {fileID: 1894735752}
+  _cameraPitch: {fileID: 1646807030}
+  _camera: {fileID: 1982245949}
+  MouseSensitivity: 250
 --- !u!114 &218075037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,10 +160,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ef2368e05ef5224cb2274748d074b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _RunSpeed: 15
-  _WalkSpeed: 5
-  _JumpPower: 10
-  _WindResistance: 1
+  _runSpeed: 15
+  _walkSpeed: 5
+  _jumpPower: 10
+  _windResistance: 1
 --- !u!23 &218075039
 MeshRenderer:
   m_ObjectHideFlags: 0
