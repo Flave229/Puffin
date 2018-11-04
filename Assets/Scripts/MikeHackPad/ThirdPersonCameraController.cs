@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.PrototypeGameplay
+namespace Assets.Scripts.MikeHackPad
 {
 	[RequireComponent(typeof(KeyboardControlCapture))]
 	public class ThirdPersonCameraController : MonoBehaviour

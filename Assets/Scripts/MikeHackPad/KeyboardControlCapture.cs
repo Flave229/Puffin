@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.PrototypeGameplay
+namespace Assets.Scripts.MikeHackPad
 {
 	public class KeyboardControlCapture : MonoBehaviour
 	{
