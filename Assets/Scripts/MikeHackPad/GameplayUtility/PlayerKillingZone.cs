@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.PrototypeGameplay.GameplayUtility
+namespace Assets.Scripts.MikeHackPad.GameplayUtility
 {
 	public class PlayerKillingZone : MonoBehaviour
 	{
