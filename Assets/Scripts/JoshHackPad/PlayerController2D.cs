@@ -6,8 +6,6 @@ namespace Assets.Scripts.JoshHackPad
 	{
 		[SerializeField] private Rigidbody2D _playerBody;
 		[SerializeField] private Transform _playerRectTransform;
-		[SerializeField] private LayerMask _groundLayer;
-		[SerializeField] private Transform _groundTransform;
 
 		[SerializeField] private float _movementSpeed = 30.0f;
 		[SerializeField] private float _jumpForce = 10.0f;
