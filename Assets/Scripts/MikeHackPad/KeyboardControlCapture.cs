@@ -8,12 +8,12 @@ namespace Assets.Scripts.MikeHackPad
 
 		void Update()
 		{
-			if (Input.GetMouseButton(0))
+			if ( Input.GetMouseButton( 0 ) )
 			{
 				_isControllerCaptured = true;
 				Cursor.lockState = CursorLockMode.Locked;
 			}
-			if (Input.GetKey(KeyCode.Escape))
+			if ( Input.GetKey( KeyCode.Escape ) )
 			{
 				_isControllerCaptured = false;
 				Cursor.lockState = CursorLockMode.None;
