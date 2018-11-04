@@ -28,7 +28,6 @@ public class PlayerPrototypeController1 : MonoBehaviour
 
     private Transform CameraPivot;
 
-
     public void Start()
     {
         _KeyboardController = GetComponent<KeyboardControlCapture>();
