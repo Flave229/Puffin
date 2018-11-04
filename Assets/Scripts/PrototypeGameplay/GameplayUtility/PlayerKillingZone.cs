@@ -1,35 +1,38 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerKillingZone : MonoBehaviour
+namespace Assets.Scripts.PrototypeGameplay.GameplayUtility
 {
-	public void Start()
+	public class PlayerKillingZone : MonoBehaviour
 	{
-
-	}
-
-	public void Update()
-	{
-
-	}
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = new Color(0.5f, 0.0f, 0.0f, 0.75f);
-		Gizmos.DrawWireCube(transform.position, transform.localScale);
-	}
-
-	private void OnDrawGizmosSelected()
-	{
-		Gizmos.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-		Gizmos.DrawCube(transform.position, transform.localScale);
-	}
-
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.tag == "Player")
+		public void Start()
 		{
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+		}
+
+		public void Update()
+		{
+
+		}
+
+		private void OnDrawGizmos()
+		{
+			Gizmos.color = new Color(0.5f, 0.0f, 0.0f, 0.75f);
+			Gizmos.DrawWireCube(transform.position, transform.localScale);
+		}
+
+		private void OnDrawGizmosSelected()
+		{
+			Gizmos.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+			Gizmos.DrawCube(transform.position, transform.localScale);
+		}
+
+		private void OnTriggerEnter(Collider other)
+		{
+			if (other.tag == "Player")
+			{
+				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+			}
 		}
 	}
 }
