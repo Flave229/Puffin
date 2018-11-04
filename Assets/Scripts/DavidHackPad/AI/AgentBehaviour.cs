@@ -15,7 +15,7 @@ namespace Assets.Scripts.DavidHackPad.AI
 		void Start()
 		{
 			_rigidbody = GetComponent<Rigidbody>();
-			_kiloJouleEnergy = 20;
+			_kiloJouleEnergy = 200;
 			_alive = true;
 		}
 
@@ -66,7 +66,7 @@ namespace Assets.Scripts.DavidHackPad.AI
 			{
 				_alive = false;
 				_rigidbody.constraints = RigidbodyConstraints.None;
-				_rigidbody.AddForce(forceTowardsFood * 10, ForceMode.Force);
+				_rigidbody.AddForce(forceTowardsFood * 30, ForceMode.Force);
 			}
 		}
 
