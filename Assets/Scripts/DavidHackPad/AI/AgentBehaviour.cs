@@ -96,9 +96,17 @@ namespace Assets.Scripts.DavidHackPad.AI
 		{
 			_rigidbody.constraints = RigidbodyConstraints.None;
 			Random randomGenerator = new Random();
-			_rigidbody.AddForce(randomGenerator.Next(5, 10), 0, randomGenerator.Next(5, 10));
-			_alive = false;
 
+			double sign = randomGenerator.NextDouble() * 2 - 1;
+			int multiply = sign < 0 ? -1 : 1;
+			float randomX = randomGenerator.Next(5, 10) * multiply;
+
+			sign = randomGenerator.NextDouble() * 2 - 1;
+			multiply = sign < 0 ? -1 : 1;
+			float randomZ = randomGenerator.Next(5, 10) * multiply;
+			_rigidbody.AddForce(randomX, 0, randomZ, ForceMode.Impulse);
+
+			_alive = false;
 			foreach (Transform child in transform)
 			{
 				Destroy(child.gameObject);
