@@ -34,14 +34,6 @@ namespace Assets.Scripts.DavidHackPad.AI
 				return;
 			}
 
-			// Scale upwards when over 100 joules
-			float scale = (_kiloJouleEnergy / 100) / 2;
-			if (_kiloJouleEnergy > 100)
-			{
-				transform.localScale = new Vector3(scale, scale, scale);
-				_rigidbody.mass = scale;
-			}
-
 			// Making energy decay at about 2 kilojoules per second
 			_kiloJouleEnergy -= Time.deltaTime * 2;
 			_timeSinceLastFoodScan += Time.deltaTime;
@@ -61,7 +53,7 @@ namespace Assets.Scripts.DavidHackPad.AI
 			ISteeringBehaviour seekForce = new Seek();
 			Vector3 forceTowardsFood = seekForce.ApplyForce(transform.position, _targetFood.transform.position);
 			// Force is a little stronger for bigger entities
-			forceTowardsFood = new Vector3(forceTowardsFood.x, 0, forceTowardsFood.z) * 3 * (scale / 2);
+			forceTowardsFood = new Vector3(forceTowardsFood.x, 0, forceTowardsFood.z) * 3;
 
 			// Temp hack that makes them fall over if they run out of energy
 			if (_kiloJouleEnergy > 0)
@@ -141,7 +133,7 @@ namespace Assets.Scripts.DavidHackPad.AI
 
 			ISteeringBehaviour repelBehaviour = new Repel();
 			Vector3 force = repelBehaviour.ApplyForce(transform.position, collidingEntity.transform.position);
-			_rigidbody.AddForce(new Vector3(force.x, 0, force.z) / 3, ForceMode.Force);
+			_rigidbody.AddForce(new Vector3(force.x, 0, force.z), ForceMode.Force);
 		}
 
 		public void AiOnTriggerStay(Collider collidingEntity)
@@ -154,7 +146,7 @@ namespace Assets.Scripts.DavidHackPad.AI
 
 			ISteeringBehaviour repelBehaviour = new Repel();
 			Vector3 force = repelBehaviour.ApplyForce(transform.position, collidingEntity.transform.position);
-			_rigidbody.AddForce(new Vector3(force.x, 0, force.z) / 3, ForceMode.Force);
+			_rigidbody.AddForce(new Vector3(force.x, 0, force.z), ForceMode.Force);
 		}
 
 		private bool IsAlive()
