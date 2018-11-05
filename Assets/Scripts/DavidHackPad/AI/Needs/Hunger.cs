@@ -12,13 +12,13 @@ namespace Assets.Scripts.DavidHackPad.AI.Needs
 	public class Hunger : MonoBehaviour, INeed
 	{
 		[SerializeField]
-		public uint CriticalCaloryLevel;
+		private uint _criticalCaloryLevel;
 		[SerializeField]
-		public uint HungryCaloryLevel;
+		private uint _hungryCaloryLevel;
 		[SerializeField]
-		public uint SatisfiedCaloryLevel;
+		private uint _satisfiedCaloryLevel;
 		[SerializeField]
-		public uint FullCaloryLevel;
+		private uint _fullCaloryLevel;
 		
 		private uint _criticalEnergyLevel;
 		private uint _hungryEnergyLevel;
@@ -30,23 +30,23 @@ namespace Assets.Scripts.DavidHackPad.AI.Needs
 		void Awake()
 		{
 #if UNITY_EDITOR
-			if (CriticalCaloryLevel > HungryCaloryLevel)
+			if (_criticalCaloryLevel > _hungryCaloryLevel)
 			{
 				Debug.LogError("The Critical Calory Level must be lower than the Hungry Calory Level");
 			}
-			if (HungryCaloryLevel > SatisfiedCaloryLevel)
+			if (_hungryCaloryLevel > _satisfiedCaloryLevel)
 			{
 				Debug.LogError("The Hungry Calory Level must be lower than the Satisfied Calory Level");
 			}
-			if (SatisfiedCaloryLevel > FullCaloryLevel)
+			if (_satisfiedCaloryLevel > _fullCaloryLevel)
 			{
 				Debug.LogError("The Satisfied Calory Level must be lower than the Full Calory Level");
 			}
 #endif
-			_criticalEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(CriticalCaloryLevel);
-			_hungryEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(HungryCaloryLevel);
-			_satisfiedEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(SatisfiedCaloryLevel);
-			_fullEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(FullCaloryLevel);
+			_criticalEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(_criticalCaloryLevel);
+			_hungryEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(_hungryCaloryLevel);
+			_satisfiedEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(_satisfiedCaloryLevel);
+			_fullEnergyLevel = (uint)MeasurementConverter.ConvertCaloriesToKiloJoules(_fullCaloryLevel);
 		}
 
 		void Start()

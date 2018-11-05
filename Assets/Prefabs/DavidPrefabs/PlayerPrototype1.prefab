@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 114558312972704430}
   - component: {fileID: 54604399256425704}
   - component: {fileID: 136280624310012138}
+  - component: {fileID: 114674492870432468}
   m_Layer: 0
   m_Name: PlayerPrototype1
   m_TagString: Player
@@ -168,6 +169,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdc26ac52b6405a429635960aeab5337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114674492870432468
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1151495374032052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66db5388fd6df3c4285491d49d37de64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _criticalCaloryLevel: 500
+  _hungryCaloryLevel: 1200
+  _satisfiedCaloryLevel: 1500
+  _fullCaloryLevel: 2000
 --- !u!114 &114876283111739396
 MonoBehaviour:
   m_ObjectHideFlags: 1
