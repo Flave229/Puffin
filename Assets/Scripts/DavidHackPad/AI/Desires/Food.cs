@@ -1,10 +1,12 @@
-﻿using Assets.Scripts.DavidHackPad.Energy;
+﻿using System;
+using Assets.Scripts.DavidHackPad.AI.Tasks;
+using Assets.Scripts.DavidHackPad.Energy;
 using UnityEngine;
 
 namespace Assets.Scripts.DavidHackPad.AI.Desires
 {
 	[RequireComponent(typeof(Collider))]
-	public class Food : MonoBehaviour
+	public class Food : MonoBehaviour, IInteractable, IEnergyTransferer
 	{
 		[SerializeField]
 		private int _calories;
@@ -48,21 +50,6 @@ namespace Assets.Scripts.DavidHackPad.AI.Desires
 
 		private void HandleBeingEaten(Collider collidingEntity)
 		{
-			// Lets say that 10 calories can be eaten in 1 seconds. 
-			float caloriesConsumed = Time.deltaTime * 10;
-
-			if (caloriesConsumed > _caloriesLeft)
-			{
-				caloriesConsumed = _caloriesLeft;
-			}
-
-			_caloriesLeft -= caloriesConsumed;
-			IEnergyReciever reciever = collidingEntity.GetComponent<IEnergyReciever>();
-			reciever?.ConsumeEnergy(new EnergyCompontent
-			{
-				EnergyType = EEnergyType.NOURISHMENT,
-				KiloJoules = caloriesConsumed * 4.184f
-			});
 
 			if (_caloriesLeft <= 0)
 			{
@@ -89,6 +76,42 @@ namespace Assets.Scripts.DavidHackPad.AI.Desires
 			}
 
 			return EIntent.EAT;
+		}
+
+		public void HandleCommunication(IInteractable interactor, EIntent intent, Action onSuccessfulInteraction = null, Action onFailedInteraction = null)
+		{
+			if (intent != EIntent.EAT)
+			{
+				onFailedInteraction?.Invoke();
+			}
+			else
+			{
+				onSuccessfulInteraction?.Invoke();
+			}
+		}
+
+		public void GiveEnergy(EnergyCompontent energy)
+		{
+			// Food cannot recieve energy
+		}
+
+		public EnergyCompontent TakeEnergy(EnergyCompontent energy)
+		{
+			// Lets say that 10 calories can be eaten in 1 seconds. 
+			float caloriesConsumed = Time.deltaTime * 10;
+
+			if (caloriesConsumed > _caloriesLeft)
+			{
+				caloriesConsumed = _caloriesLeft;
+			}
+
+			_caloriesLeft -= caloriesConsumed;
+
+			return new EnergyCompontent
+			{
+				EnergyType = EEnergyType.NOURISHMENT,
+				KiloJoules = caloriesConsumed * 4.184f
+			};
 		}
 	}
 }

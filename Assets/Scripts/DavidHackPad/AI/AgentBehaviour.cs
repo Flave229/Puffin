@@ -1,6 +1,11 @@
-﻿using Assets.Scripts.DavidHackPad.AI.ColliderHelpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.DavidHackPad.AI.ColliderHelpers;
 using Assets.Scripts.DavidHackPad.AI.Desires;
-using Assets.Scripts.DavidHackPad.AI.Movement;
+using Assets.Scripts.DavidHackPad.AI.Needs;
+using Assets.Scripts.DavidHackPad.AI.Tasks;
+using Assets.Scripts.DavidHackPad.AI.Tasks.Movement;
 using Assets.Scripts.DavidHackPad.Energy;
 using UnityEngine;
 using Random = System.Random;
@@ -8,12 +13,14 @@ using Random = System.Random;
 namespace Assets.Scripts.DavidHackPad.AI
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class AgentBehaviour : MonoBehaviour, IEnergyReciever, IAiCollider
+	public class AgentBehaviour : MonoBehaviour, IEnergyTransferer, IAiCollider, IInteractable
 	{
 		private Rigidbody _rigidbody;
 		private float _kiloJouleEnergy;
 		private bool _alive;
 
+		private List<INeed> _needs;
+		private ITask _currentTask;
 		// Scan for food every 3 seconds
 		private float _timeSinceLastFoodScan;
 
@@ -25,6 +32,10 @@ namespace Assets.Scripts.DavidHackPad.AI
 			_kiloJouleEnergy = 200;
 			_alive = true;
 			_timeSinceLastFoodScan = Mathf.Infinity;
+
+			_needs = GetComponents<INeed>().ToList();
+
+			_rigidbody.freezeRotation = true;
 		}
 
 		void Update()
@@ -34,63 +45,48 @@ namespace Assets.Scripts.DavidHackPad.AI
 				return;
 			}
 
-			// Making energy decay at about 2 kilojoules per second
-			_kiloJouleEnergy -= Time.deltaTime * 2;
-			_timeSinceLastFoodScan += Time.deltaTime;
-
-			// Agent wants food
-			if (_timeSinceLastFoodScan > 3 || _targetFood == null)
-			{
-				_timeSinceLastFoodScan = 0;
-				FindFood();
-			}
-
-			if (_targetFood == null)
-			{
-				return;
-			}
-
-			ISteeringBehaviour seekForce = new Seek();
-			Vector3 forceTowardsFood = seekForce.ApplyForce(transform.position, _targetFood.transform.position);
-			// Force is a little stronger for bigger entities
-			forceTowardsFood = new Vector3(forceTowardsFood.x, 0, forceTowardsFood.z) * 3;
-
-			// Temp hack that makes them fall over if they run out of energy
-			if (_kiloJouleEnergy > 0)
-			{
-				_rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-				_rigidbody.AddForce(forceTowardsFood, ForceMode.Force);
-			}
-			else
+			if (_kiloJouleEnergy <= 0)
 			{
 				KillAgent();
-				_rigidbody.AddForce(forceTowardsFood * 30, ForceMode.Force);
 			}
+
+			// Normal Human need minimum 1200 calories a day to prevent illness
+			// This maps roughly to 5020 kilojoules of energy.
+			// Assuming a "day" takes 10 mins in the game. 10 mins = 600 seconds.
+			// 600 seconds to naturally consume 5020 kJ.
+			// 1 second consumes 8.36 calories
+			_kiloJouleEnergy -= Time.deltaTime * 8.36f;
+
+			if (_currentTask == null || _currentTask.IsComplete())
+			{
+				INeed highestNeed = GetHighestPriorityNeed();
+				_currentTask = highestNeed.GenerateTask();
+			}
+
+			_currentTask?.Execute();
 		}
 
-		private void FindFood()
+		private INeed GetHighestPriorityNeed()
 		{
-			Food[] foodObjects = FindObjectsOfType<Food>();
-
-			if (foodObjects.Length == 0)
+			if (_needs.Count <= 0)
 			{
-				return;
+				return null;
 			}
 
-			_targetFood = foodObjects[0];
-			float closestDistance = Mathf.Infinity;
-			for (int foodIndex = 1; foodIndex < foodObjects.Length; ++foodIndex)
+			INeed highestPriorityNeed = _needs[0];
+			float priorityValue = highestPriorityNeed.GetPriority();
+			foreach (INeed need in _needs)
 			{
-				Food food = foodObjects[foodIndex];
-				Vector3 directionTowardsFood = food.transform.position - this.transform.position;
-				float squareDistanceToTarget = directionTowardsFood.sqrMagnitude;
-
-				if (squareDistanceToTarget < closestDistance)
+				if (need.GetPriority() < priorityValue)
 				{
-					closestDistance = squareDistanceToTarget;
-					_targetFood = food;
+					continue;
 				}
+
+				highestPriorityNeed = need;
+				priorityValue = need.GetPriority();
 			}
+
+			return highestPriorityNeed;
 		}
 
 		private void KillAgent()
@@ -114,13 +110,21 @@ namespace Assets.Scripts.DavidHackPad.AI
 			}
 		}
 
-		public void ConsumeEnergy(EnergyCompontent energy)
+		public void GiveEnergy(EnergyCompontent energy)
 		{
 			if (energy.EnergyType == EEnergyType.NOURISHMENT)
 			{
 				_kiloJouleEnergy += energy.KiloJoules;
-				FindFood();
 			}
+		}
+
+		public EnergyCompontent TakeEnergy(EnergyCompontent energy)
+		{
+			if (energy.EnergyType == EEnergyType.NOURISHMENT)
+			{
+				// Can not currently eat people
+			}
+			return new EnergyCompontent();
 		}
 
 		public void AiOnTriggerEnter(Collider collidingEntity)
@@ -152,6 +156,17 @@ namespace Assets.Scripts.DavidHackPad.AI
 		private bool IsAlive()
 		{
 			return _alive;
+		}
+
+		public float GetEnergyLevel()
+		{
+			return _kiloJouleEnergy;
+		}
+
+		public void HandleCommunication(IInteractable interactor, EIntent intent, Action onSuccessfulInteraction = null,
+			Action onFailedInteraction = null)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

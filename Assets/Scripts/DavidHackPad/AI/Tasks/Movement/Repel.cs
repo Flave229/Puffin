@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.DavidHackPad.AI.Movement
+namespace Assets.Scripts.DavidHackPad.AI.Tasks.Movement
 {
 	class Repel : ISteeringBehaviour
 	{
