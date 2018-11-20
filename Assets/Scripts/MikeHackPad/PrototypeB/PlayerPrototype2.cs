@@ -36,19 +36,19 @@ namespace Assets.Scripts.MikeHackPad
 
 		private void LateUpdate()
 		{
-			float length = ( _controllerCollider.height * 0.5f ) + _floorSnapping;
-			if ( !_controllerCollider.isGrounded &&
-				_previouslyTouchingFloor &&
-				!_jumpRequested )
-			{
-				RaycastHit info;
-				Ray ray = new Ray( transform.position, Vector3.down );
-				if ( Physics.Raycast( ray, out info, length ) )
-				{
-					// Stick the controller to the floor
-					_controllerCollider.Move( Vector3.down );
-				}
-			}
+			//float length = ( _controllerCollider.height * 0.5f ) + _floorSnapping;
+			//if ( !_controllerCollider.isGrounded &&
+			//	_previouslyTouchingFloor &&
+			//	!_jumpRequested )
+			//{
+			//	RaycastHit info;
+			//	Ray ray = new Ray( transform.position, Vector3.down );
+			//	if ( Physics.Raycast( ray, out info, length ) )
+			//	{
+			//		// Stick the controller to the floor
+			//		_controllerCollider.Move( Vector3.down );
+			//	}
+			//}
 		}
 
 		private void UpdateGroundMovement()

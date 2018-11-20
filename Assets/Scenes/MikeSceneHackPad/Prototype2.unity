@@ -561,8 +561,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!136 &426525055
-CapsuleCollider:
+--- !u!143 &426525055
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -570,9 +570,13 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  serializedVersion: 2
   m_Height: 2
-  m_Direction: 1
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &426525056
 MeshRenderer:
@@ -640,6 +644,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f50a10ceb745ef42afc6c7c2fafb706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _runSpeed: 0
+  _walkSpeed: 0
+  _floorSnapping: 1.5
 --- !u!1 &511387308
 GameObject:
   m_ObjectHideFlags: 0
@@ -1673,8 +1680,8 @@ MonoBehaviour:
   _leftStick: {fileID: 1070032583}
   _dPad: {fileID: 164417221}
   _rightStick: {fileID: 815048664}
-  _sack: {fileID: 301790977}
-  _btart: {fileID: 1440508976}
+  _back: {fileID: 301790977}
+  _start: {fileID: 1440508976}
   _buttonA: {fileID: 1894872380}
   _buttonB: {fileID: 315975328}
   _buttonX: {fileID: 835847028}
