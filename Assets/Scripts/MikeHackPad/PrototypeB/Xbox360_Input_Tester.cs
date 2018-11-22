@@ -50,7 +50,7 @@ public class Xbox360_Input_Tester : MonoBehaviour
 			_leftStick.position = _leftStickStartPos + 
 				( new Vector3( Input.GetAxis( "GP_Xbox_L_JoystickHorizontal" ) * 2.5f,
 				Input.GetAxis( "GP_Xbox_L_JoystickVertical" ) * 2.5f,
-				0.0f ) * -1.0f );
+				0.0f ) );
 		}
 		else
 		{
@@ -66,7 +66,7 @@ public class Xbox360_Input_Tester : MonoBehaviour
 			_dPad.position = _dPadStartPos +
 				( new Vector3( Input.GetAxis( "GP_Xbox_DPadHorizontal" ) * 2.5f,
 				Input.GetAxis( "GP_Xbox_DPadVertical" ) * 2.5f,
-				0.0f ) * -1.0f );
+				0.0f ) );
 		}
 		else
 		{
@@ -82,7 +82,7 @@ public class Xbox360_Input_Tester : MonoBehaviour
 			_rightStick.position = _rightStickStartPos +
 				( new Vector3( Input.GetAxis( "GP_Xbox_R_JoystickHorizontal" ) * 2.5f,
 				Input.GetAxis( "GP_Xbox_R_JoystickVertical" ) * 2.5f,
-				0.0f ) * -1.0f );
+				0.0f ) );
 		}
 		else
 		{
