@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class Xbox360_Input_Tester : MonoBehaviour
 {
+	public float _positionMultiplier = 1.0f;
+	public float _angle = 50.0f;
+
 	public Transform _leftStick;
 	public Transform _dPad;
 	public Transform _rightStick;
@@ -25,7 +28,6 @@ public class Xbox360_Input_Tester : MonoBehaviour
 	public Transform _lB;
 	public Transform _lT;
 
-	float _angle = 50.0f;
 	Vector3 _activeSpin = new Vector3( 0.0f, 0.0f, 50.0f );
 	Vector3 _leftStickStartPos;
 	Vector3 _dPadStartPos;
@@ -48,8 +50,8 @@ public class Xbox360_Input_Tester : MonoBehaviour
 			Input.GetAxis( "GP_Xbox_L_JoystickVertical" ) != 0 )
 		{
 			_leftStick.position = _leftStickStartPos + 
-				( new Vector3( Input.GetAxis( "GP_Xbox_L_JoystickHorizontal" ) * 2.5f,
-				Input.GetAxis( "GP_Xbox_L_JoystickVertical" ) * 2.5f,
+				( new Vector3( Input.GetAxis( "GP_Xbox_L_JoystickHorizontal" ) * _positionMultiplier,
+				Input.GetAxis( "GP_Xbox_L_JoystickVertical" ) * _positionMultiplier,
 				0.0f ) );
 		}
 		else
@@ -64,8 +66,8 @@ public class Xbox360_Input_Tester : MonoBehaviour
 			Input.GetAxis( "GP_Xbox_DPadVertical" ) != 0 )
 		{
 			_dPad.position = _dPadStartPos +
-				( new Vector3( Input.GetAxis( "GP_Xbox_DPadHorizontal" ) * 2.5f,
-				Input.GetAxis( "GP_Xbox_DPadVertical" ) * 2.5f,
+				( new Vector3( Input.GetAxis( "GP_Xbox_DPadHorizontal" ) * _positionMultiplier,
+				Input.GetAxis( "GP_Xbox_DPadVertical" ) * _positionMultiplier,
 				0.0f ) );
 		}
 		else
@@ -80,8 +82,8 @@ public class Xbox360_Input_Tester : MonoBehaviour
 			Input.GetAxis( "GP_Xbox_R_JoystickVertical" ) != 0 )
 		{
 			_rightStick.position = _rightStickStartPos +
-				( new Vector3( Input.GetAxis( "GP_Xbox_R_JoystickHorizontal" ) * 2.5f,
-				Input.GetAxis( "GP_Xbox_R_JoystickVertical" ) * 2.5f,
+				( new Vector3( Input.GetAxis( "GP_Xbox_R_JoystickHorizontal" ) * _positionMultiplier,
+				Input.GetAxis( "GP_Xbox_R_JoystickVertical" ) * _positionMultiplier,
 				0.0f ) );
 		}
 		else

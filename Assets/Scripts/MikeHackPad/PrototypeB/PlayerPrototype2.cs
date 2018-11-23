@@ -6,59 +6,44 @@ using UnityEngine;
 namespace Assets.Scripts.MikeHackPad
 {
 	[RequireComponent( typeof( CharacterController ) )]
+	[RequireComponent( typeof( CharacterSpriteRenderer ) )]
 	public class PlayerPrototype2 : MonoBehaviour
 	{
-		[SerializeField]
-		private SpriteRenderer _standingSprite;
-		[SerializeField]
-		private SpriteRenderer _walkingSprite;
-		[SerializeField]
-		private SpriteRenderer _runningSprite;
-		[SerializeField]
-		private SpriteRenderer _jumpingSprite;
-		[SerializeField]
-		private SpriteRenderer _fallingSprite;
 
 		[SerializeField]
-		private float _runSpeed = 2.0f;
+		private float _runSpeed = 8.0f;
 		[SerializeField]
-		private float _walkSpeed = 10.0f;
+		private float _walkSpeed = 2.0f;
 		[SerializeField]
 		private float _jumpPower = 10.0f;
 		[SerializeField]
 		private float _windResistance = 1.0f;
 		[SerializeField]
 		private float _floorSnapping = 1.5f;
+		[SerializeField]
+		private float _jumpingGravity = 8.0f;
+		[SerializeField]
+		private float _endOfJumpGravity = 12.0f;
 
 		private Vector2 _velocity;
 		private Vector2 _heading;
 		private bool _jumpRequested = false;
 		private bool _previouslyTouchingFloor = false;
-
-		private bool _isStanding;
-		private bool _isWalking;
-		private bool _isRunning;
+		private float _currentGravity;
+		
+		private bool _isJumping;
 
 		private CharacterController _controllerCollider;
+		private CharacterSpriteRenderer _characterSpriteRenderer;
 
-		// Use this for initialization
 		void Start()
 		{
 			_controllerCollider = GetComponent<CharacterController>();
+			_characterSpriteRenderer = GetComponent<CharacterSpriteRenderer>();
 		}
 
-		// Update is called once per frame
 		void Update()
 		{
-			_isStanding = false;
-			_isWalking = false;
-			_isRunning = false;
-
-			_standingSprite.enabled = false;
-			_walkingSprite.enabled = false;
-			_runningSprite.enabled = false;
-			_jumpingSprite.enabled = false;
-			_fallingSprite.enabled = false;
 
 			if ( _controllerCollider.isGrounded )
 			{
@@ -67,12 +52,12 @@ namespace Assets.Scripts.MikeHackPad
 			}
 			else
 			{
-				// Apply Earth gravity
-				_velocity += ( ( Vector2.up * -1.0f ) * 9.807f ) * Time.deltaTime;
+				// Earth gravity (9.807f)
+				_velocity += ( Vector2.down * _currentGravity ) * Time.deltaTime;
 				_velocity += ( -_velocity.normalized * _windResistance ) * Time.deltaTime;
 			}
 
-			UpdateGroundMovement();
+			UpdateMovement();
 
 			_controllerCollider.Move( ( _heading + _velocity ) * Time.deltaTime );
 		}
@@ -98,37 +83,77 @@ namespace Assets.Scripts.MikeHackPad
 #endif
 			_previouslyTouchingFloor = _controllerCollider.isGrounded;
 			_jumpRequested = false;
+		}
 
-			_isStanding = _controllerCollider.isGrounded;
-
-			UpdateSprites();
+		private void UpdateMovement()
+		{
+			UpdateGroundMovement();
+			UpdateAirMovement();
 		}
 
 		private void UpdateGroundMovement()
 		{
 			_heading = Vector2.zero;
-
-			if ( Input.GetAxis( "GP_Xbox_AButton" ) != 0 && _controllerCollider.isGrounded )
-			{
-				_velocity += Vector2.up * _jumpPower;
-				_jumpRequested = true;
-			}
-
+			_characterSpriteRenderer._currentSprite = ECharacterSprite.IS_STANDING;
+			
 			float leftStickX = Input.GetAxis( "GP_Xbox_L_JoystickHorizontal" );
 			Debug.Log( leftStickX );
-			leftStickX = ( ( leftStickX < 0.0175f ) && ( leftStickX > -0.0175f ) ) ? 0.0f : leftStickX;
+			leftStickX = ( ( leftStickX < 0.2f ) && ( leftStickX > -0.2f ) ) ? 0.0f : leftStickX;
 
 			if ( leftStickX != 0 )
 			{
 				if ( Input.GetAxis( "GP_Xbox_LB" ) != 0 )
 				{
+					_characterSpriteRenderer._currentSprite = ECharacterSprite.IS_RUNNING;
 					_heading.x += leftStickX * _runSpeed;
-					_isRunning = true;
 				}
 				else
 				{
+					_characterSpriteRenderer._currentSprite = ECharacterSprite.IS_WALKING;
 					_heading.x += leftStickX * _walkSpeed;
-					_isWalking = true;
+				}
+
+				//_isSpriteXFlipped = _heading.x < 0;
+				_characterSpriteRenderer._isXFlipped = _heading.x < 0;
+			}
+		}
+
+		private void UpdateAirMovement()
+		{
+			if ( _controllerCollider.isGrounded )
+			{
+				_isJumping = false;
+			}
+
+			if ( Input.GetAxis( "GP_Xbox_AButton" ) != 0 && _controllerCollider.isGrounded )
+			{
+				_velocity += Vector2.up * _jumpPower;
+				_jumpRequested = true;
+				_isJumping = true;
+			}
+
+			if ( _velocity.y < 0.0f && _isJumping )
+			{
+				_currentGravity = _endOfJumpGravity;
+			}
+			else if ( _velocity.y > 0.0f && Input.GetAxis( "GP_Xbox_AButton" ) != 0 )
+			{
+				_currentGravity = _jumpingGravity;
+			}
+			else if ( !_controllerCollider.isGrounded )
+			{
+				_currentGravity = -Physics.gravity.y;
+			}
+
+			if ( !_controllerCollider.isGrounded )
+			{
+				if ( _velocity.y > 0.0f )
+				{
+					_characterSpriteRenderer._currentSprite = ECharacterSprite.IS_JUMPING;
+				}
+				else
+				{
+					_characterSpriteRenderer._currentSprite = ECharacterSprite.IS_FALLING;
 				}
 			}
 		}
@@ -147,42 +172,6 @@ namespace Assets.Scripts.MikeHackPad
 				transform.SetParent( null );
 				transform.localEulerAngles = new Vector3( 0.0f, transform.localEulerAngles.y, 0.0f );
 				transform.localScale = new Vector3( 1.0f, 1.0f, 1.0f );
-			}
-		}
-
-		private void UpdateSprites()
-		{
-			bool flipped = _heading.x < 0;
-			if ( !_isStanding )
-			{
-				if ( _velocity.y > 0 )
-				{
-					_jumpingSprite.enabled = true;
-					_jumpingSprite.flipX = flipped;
-				}
-				else
-				{
-					_fallingSprite.enabled = true;
-					_fallingSprite.flipX = flipped;
-				}
-			}
-			else
-			{
-				if ( _isWalking )
-				{
-					_walkingSprite.enabled = true;
-					_walkingSprite.flipX = flipped;
-					return;
-				}
-				if ( _isRunning )
-				{
-					_runningSprite.enabled = true;
-					_runningSprite.flipX = flipped;
-					return;
-				}
-
-				_standingSprite.enabled = true;
-				_standingSprite.flipX = flipped;
 			}
 		}
 	}

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33530604888691218}
   - component: {fileID: 143069725028746278}
   - component: {fileID: 114171461589584518}
+  - component: {fileID: 114811687996790470}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -210,16 +211,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f50a10ceb745ef42afc6c7c2fafb706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _runSpeed: 7.5
+  _walkSpeed: 2
+  _jumpPower: 8
+  _windResistance: 1
+  _floorSnapping: 1.5
+  _jumpingGravity: 5
+  _endOfJumpGravity: 20
+--- !u!114 &114811687996790470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1040892518386042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435ffe804ae9de043ae5c1946735ef96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _standingSprite: {fileID: 212450422292587082}
   _walkingSprite: {fileID: 212825056132982990}
   _runningSprite: {fileID: 212827375842984538}
   _jumpingSprite: {fileID: 212993463075031878}
   _fallingSprite: {fileID: 212677152244812316}
-  _runSpeed: 50
-  _walkSpeed: 20
-  _jumpPower: 10
-  _windResistance: 1
-  _floorSnapping: 1.5
+  _currentSprite: 0
+  _isXFlipped: 0
 --- !u!143 &143069725028746278
 CharacterController:
   m_ObjectHideFlags: 1
